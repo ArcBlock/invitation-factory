@@ -19,7 +19,7 @@ const templateFile = path.join(__dirname, 'assets/templates/2019-shanghai-odysse
 
 const canvasWidth = 1000;
 
-module.exports = ({ name, title }) => {
+module.exports = ({ name, title = '' }) => {
   const cacheKey = crypto
     .createHash('md5')
     .update(JSON.stringify({ name, title }))
@@ -47,7 +47,7 @@ module.exports = ({ name, title }) => {
           maxWidth: canvasWidth,
           maxHeight: 60,
           placementX: textStart,
-          placementY: 710,
+          placementY: title ? 710 : 750,
         };
 
         return tpl.print(
@@ -67,6 +67,10 @@ module.exports = ({ name, title }) => {
       // add title text
       .then(tpl => Jimp.loadFont(FONT_HAN_SANS_BLACK_36).then(font => [tpl, font]))
       .then(([tpl, font]) => {
+        if (!title) {
+          return Promise.resolve(tpl);
+        }
+
         const textWidth = Jimp.measureText(font, title);
         const textStart = (canvasWidth - textWidth) / 2;
 

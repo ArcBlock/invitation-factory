@@ -1,5 +1,8 @@
+const fs = require('fs');
+const path = require('path');
 const generate = require('./lib');
 
 (async () => {
-  await generate({ name: '肖凤', title: '万向区块链' });
+  const resultFile = await generate({ name: '肖凤', title: '' });
+  fs.copyFileSync(resultFile, path.join(__dirname, 'generated/demo.jpg'));
 })();
